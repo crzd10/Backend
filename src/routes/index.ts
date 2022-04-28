@@ -16,10 +16,9 @@ const limiter = rateLimit({
 router.get('/', limiter, async (req: Request, res: Response, next: NextFunction) => {
     try {
         // Retrieving environment variables from .env
-        const API_KEY_NAME: string | undefined = process.env.API_KEY_NAME
         const API_KEY_VALUE: string | undefined = process.env.API_KEY_VALUE
 
-        if (API_KEY_NAME && API_KEY_VALUE) {
+        if (API_KEY_VALUE) {
             // Filetring/modifying query parameters before forwarding
             const reqParams: { ticker?: string, symbol?: string } = queryParamsToUse(['ticker'], req.query)
             // Updating the key name of the ticker element
@@ -36,7 +35,7 @@ router.get('/', limiter, async (req: Request, res: Response, next: NextFunction)
                 params: filteredQueryParams, // filtered query params
                 headers: {
                     'X-RapidAPI-Host': 'yh-finance.p.rapidapi.com',
-                    [API_KEY_NAME]: API_KEY_VALUE, // Retrieved from .env file
+                    'X-RapidAPI-Key': API_KEY_VALUE, // Retrieved from .env file
                 }
             };
 
